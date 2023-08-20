@@ -1,6 +1,5 @@
 package com.kbcoding.tictactoe.presentation.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
@@ -14,6 +13,15 @@ class TicTacToeView(
     defStyleAttr: Int,
     defStyleRes: Int
 ) : View(context, attributeSet, defStyleAttr, defStyleRes) {
+
+    var ticTacToeField: TicTacToeField? = null
+        set(value) {
+            field?.listeners?.remove(listener)
+            field = value
+            field?.listeners?.add(listener)
+            requestLayout()
+            invalidate()
+        }
 
     private var playerOneColor by Delegates.notNull<Int>()
     private var playerTwoColor by Delegates.notNull<Int>()
@@ -35,6 +43,16 @@ class TicTacToeView(
         }
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        ticTacToeField?.listeners?.add(listener)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        ticTacToeField?.listeners?.remove(listener)
+    }
+
     private fun initAttributes(attributeSet: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
         val typedArray = context.obtainStyledAttributes(
             attributeSet, R.styleable.TicTacToeView, defStyleAttr, defStyleRes
@@ -53,6 +71,10 @@ class TicTacToeView(
         playerOneColor = PLAYER_ONE_DEFAULT_COLOR
         playerTwoColor = PLAYER_TWO_DEFAULT_COLOR
         gridColor = GRID_DEFAULT_COLOR
+    }
+
+    private val listener: OnFieldChangedListener = {
+
     }
 
     companion object {
