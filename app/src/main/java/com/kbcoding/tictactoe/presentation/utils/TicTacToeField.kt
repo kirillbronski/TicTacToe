@@ -1,4 +1,4 @@
-package com.kbcoding.tictactoe
+package com.kbcoding.tictactoe.presentation.utils
 
 typealias OnFieldChangedListener = (field: TicTacToeField) -> Unit
 
