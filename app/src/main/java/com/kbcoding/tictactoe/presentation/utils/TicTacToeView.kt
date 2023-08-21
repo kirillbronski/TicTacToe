@@ -38,6 +38,8 @@ class TicTacToeView(
     private var cellSize = 0f
     private var cellPadding = 0f
 
+    private val cellRect = RectF()
+
     private lateinit var playerOnePaint: Paint
     private lateinit var playerTwoPaint: Paint
     private lateinit var gridPaint: Paint
@@ -58,7 +60,9 @@ class TicTacToeView(
         }
         initPaints()
         if (isInEditMode) {
-            ticTacToeField = TicTacToeField(6, 6)
+            ticTacToeField = TicTacToeField(8, 6)
+            ticTacToeField?.setCell(4, 2, Cell.PLAYER_ONE)
+            ticTacToeField?.setCell(4, 3, Cell.PLAYER_TWO)
         }
     }
 
@@ -129,7 +133,7 @@ class TicTacToeView(
     }
 
     private fun drawCells(canvas: Canvas) {
-        val field = ticTacToeField ?: return
+        val field = this.ticTacToeField ?: return
         for (row in 0 until field.rows) {
             for (column in 0 until field.columns) {
                 val cell = field.getCell(row, column)
@@ -143,11 +147,35 @@ class TicTacToeView(
     }
 
     private fun drawPlayerOne(canvas: Canvas, row: Int, column: Int) {
-
+        val cellRect = getCellRect(row, column)
+        canvas.drawLine(
+            cellRect.left, cellRect.top,
+            cellRect.right, cellRect.bottom, playerOnePaint
+        )
+        canvas.drawLine(
+            cellRect.right, cellRect.top,
+            cellRect.left, cellRect.bottom, playerOnePaint
+        )
     }
 
     private fun drawPlayerTwo(canvas: Canvas, row: Int, column: Int) {
+        val cellRect = getCellRect(row, column)
+        canvas.drawCircle(
+            cellRect.centerX(),
+            cellRect.centerY(),
+            cellRect.width() / 2,
+            playerTwoPaint
+        )
+    }
 
+    private fun getCellRect(row: Int, column: Int): RectF {
+        cellRect.apply {
+            left = fieldRect.left + column * cellSize + cellPadding
+            top = fieldRect.top + row * cellSize + cellPadding
+            right = cellRect.left + cellSize - cellPadding * 2
+            bottom = cellRect.top + cellSize - cellPadding * 2
+        }
+        return cellRect
     }
 
     private fun initPaints() {
