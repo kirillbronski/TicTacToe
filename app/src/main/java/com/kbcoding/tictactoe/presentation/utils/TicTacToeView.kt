@@ -3,8 +3,10 @@ package com.kbcoding.tictactoe.presentation.utils
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import com.kbcoding.tictactoe.R
+import java.lang.Integer.max
 import kotlin.properties.Delegates
 
 class TicTacToeView(
@@ -53,6 +55,33 @@ class TicTacToeView(
         ticTacToeField?.listeners?.remove(listener)
     }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val minWidth = suggestedMinimumWidth + paddingLeft + paddingRight
+        val minHeight = suggestedMinimumHeight + paddingTop + paddingBottom
+
+        val desiredCellSizeInPixel = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, DESIRED_CELL_SIZE, resources.displayMetrics
+        ).toInt()
+
+        val rows = ticTacToeField?.rows ?: 0
+        val columns = ticTacToeField?.columns ?: 0
+
+        val desiredWidth =
+            max(minWidth, columns * desiredCellSizeInPixel + paddingLeft + paddingRight)
+        val desiredHeight =
+            max(minHeight, rows * desiredCellSizeInPixel + paddingTop + paddingBottom)
+
+        setMeasuredDimension(
+            resolveSize(desiredWidth, widthMeasureSpec),
+            resolveSize(desiredHeight, heightMeasureSpec)
+        )
+
+    }
+
     private fun initAttributes(attributeSet: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
         val typedArray = context.obtainStyledAttributes(
             attributeSet, R.styleable.TicTacToeView, defStyleAttr, defStyleRes
@@ -81,5 +110,7 @@ class TicTacToeView(
         const val PLAYER_ONE_DEFAULT_COLOR = Color.GREEN
         const val PLAYER_TWO_DEFAULT_COLOR = Color.RED
         const val GRID_DEFAULT_COLOR = Color.GRAY
+
+        const val DESIRED_CELL_SIZE = 50f
     }
 }
