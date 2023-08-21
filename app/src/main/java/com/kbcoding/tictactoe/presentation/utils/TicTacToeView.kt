@@ -57,6 +57,9 @@ class TicTacToeView(
             initDefaultColors()
         }
         initPaints()
+        if (isInEditMode) {
+            ticTacToeField = TicTacToeField(6, 6)
+        }
     }
 
     override fun onAttachedToWindow() {
@@ -96,8 +99,36 @@ class TicTacToeView(
         )
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (ticTacToeField == null) return
+        if (cellSize == 0f) return
+        if (fieldRect.width() <= 0) return
+        if (fieldRect.height() <= 0) return
+
+        drawGrid(canvas)
+        drawCells(canvas)
+    }
+
+    private fun drawGrid(canvas: Canvas) {
+        val field = this.ticTacToeField ?: return
+
+        val startX = fieldRect.left
+        val stopX = fieldRect.right
+        for (i in 0..field.rows) {
+            val y = fieldRect.top + cellSize * i
+            canvas.drawLine(startX, y, stopX, y, gridPaint)
+        }
+
+        val startY = fieldRect.top
+        val stopY = fieldRect.bottom
+        for (i in 0..field.columns) {
+            val x = fieldRect.left + cellSize * i
+            canvas.drawLine(x, startY, x, stopY, gridPaint)
+        }
+    }
+
+    private fun drawCells(canvas: Canvas) {
 
     }
 
