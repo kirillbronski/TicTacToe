@@ -2,11 +2,13 @@ package com.kbcoding.tictactoe.presentation.utils
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import com.kbcoding.tictactoe.R
 import java.lang.Integer.max
+import kotlin.math.min
 import kotlin.properties.Delegates
 
 class TicTacToeView(
@@ -21,6 +23,7 @@ class TicTacToeView(
             field?.listeners?.remove(listener)
             field = value
             field?.listeners?.add(listener)
+            updateViewSize()
             requestLayout()
             invalidate()
         }
@@ -28,6 +31,10 @@ class TicTacToeView(
     private var playerOneColor by Delegates.notNull<Int>()
     private var playerTwoColor by Delegates.notNull<Int>()
     private var gridColor by Delegates.notNull<Int>()
+
+    private val fieldRect = RectF()
+    private var cellSize = 0f
+    private var cellPadding = 0f
 
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) :
             this(context, attributeSet, defStyleAttr, R.style.DefaultTicTacToeStyle)
@@ -57,6 +64,7 @@ class TicTacToeView(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        updateViewSize()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -80,6 +88,27 @@ class TicTacToeView(
             resolveSize(desiredHeight, heightMeasureSpec)
         )
 
+    }
+
+    private fun updateViewSize() {
+        val field = this.ticTacToeField ?: return
+
+        val safeWidth = width - paddingLeft - paddingRight
+        val safeHeight = height - paddingTop - paddingBottom
+
+        val cellWidth = safeWidth / field.columns.toFloat()
+        val cellHeight = safeHeight / field.rows.toFloat()
+
+        cellSize = min(cellWidth, cellHeight)
+        cellPadding = cellSize * 0.2f
+
+        val fieldWidth = cellSize * field.columns
+        val fieldHeight = cellSize * field.rows
+
+        fieldRect.left = paddingLeft + (safeWidth - fieldWidth) / 2
+        fieldRect.top = paddingTop + (safeHeight - fieldHeight) / 2
+        fieldRect.right = fieldRect.left + fieldWidth
+        fieldRect.bottom = fieldRect.top + fieldHeight
     }
 
     private fun initAttributes(attributeSet: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
