@@ -1,7 +1,9 @@
 package com.kbcoding.tictactoe.presentation.utils
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -36,6 +38,10 @@ class TicTacToeView(
     private var cellSize = 0f
     private var cellPadding = 0f
 
+    private lateinit var playerOnePaint: Paint
+    private lateinit var playerTwoPaint: Paint
+    private lateinit var gridPaint: Paint
+
     constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) :
             this(context, attributeSet, defStyleAttr, R.style.DefaultTicTacToeStyle)
 
@@ -50,6 +56,7 @@ class TicTacToeView(
         } else {
             initDefaultColors()
         }
+        initPaints()
     }
 
     override fun onAttachedToWindow() {
@@ -87,7 +94,37 @@ class TicTacToeView(
             resolveSize(desiredWidth, widthMeasureSpec),
             resolveSize(desiredHeight, heightMeasureSpec)
         )
+    }
 
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+    }
+
+    private fun initPaints() {
+        playerOnePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = playerOneColor
+            style = Paint.Style.STROKE
+            strokeWidth = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, PLAYER_STROKE_WIDTH, resources.displayMetrics
+            )
+        }
+
+        playerTwoPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = playerTwoColor
+            style = Paint.Style.STROKE
+            strokeWidth = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, PLAYER_STROKE_WIDTH, resources.displayMetrics
+            )
+        }
+
+        gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = gridColor
+            style = Paint.Style.STROKE
+            strokeWidth = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, GRID_STROKE_WIDTH, resources.displayMetrics
+            )
+        }
     }
 
     private fun updateViewSize() {
@@ -141,5 +178,7 @@ class TicTacToeView(
         const val GRID_DEFAULT_COLOR = Color.GRAY
 
         const val DESIRED_CELL_SIZE = 50f
+        const val PLAYER_STROKE_WIDTH = 3f
+        const val GRID_STROKE_WIDTH = 1f
     }
 }
