@@ -29,7 +29,7 @@ class TicTacToeField(
 }
 
 enum class Cell {
-    PLAYER_1,
-    PLAYER_2,
+    PLAYER_ONE,
+    PLAYER_TWO,
     EMPTY
 }

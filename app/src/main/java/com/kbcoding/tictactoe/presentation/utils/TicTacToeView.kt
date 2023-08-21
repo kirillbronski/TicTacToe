@@ -129,6 +129,24 @@ class TicTacToeView(
     }
 
     private fun drawCells(canvas: Canvas) {
+        val field = ticTacToeField ?: return
+        for (row in 0 until field.rows) {
+            for (column in 0 until field.columns) {
+                val cell = field.getCell(row, column)
+                if (cell == Cell.PLAYER_ONE) {
+                    drawPlayerOne(canvas, row, column)
+                } else if (cell == Cell.PLAYER_TWO) {
+                    drawPlayerTwo(canvas, row, column)
+                }
+            }
+        }
+    }
+
+    private fun drawPlayerOne(canvas: Canvas, row: Int, column: Int) {
+
+    }
+
+    private fun drawPlayerTwo(canvas: Canvas, row: Int, column: Int) {
 
     }
 
