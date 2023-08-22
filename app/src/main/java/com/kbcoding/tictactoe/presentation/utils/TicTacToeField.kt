@@ -25,7 +25,6 @@ class TicTacToeField(
             }
         }
     }
-
 }
 
 enum class Cell {

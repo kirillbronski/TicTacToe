@@ -9,25 +9,22 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
+    private var isFirstPlayer = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.cvTicTacToeView.ticTacToeField = TicTacToeField(10, 10)
-        binding.btnRandomField.setOnClickListener {
-            binding.cvTicTacToeView.ticTacToeField = TicTacToeField(
-                Random.nextInt(3, 10),
-                Random.nextInt(3, 10)
-            )
-            for (i in 0..binding.cvTicTacToeView.ticTacToeField!!.rows) {
-                for (j in 0..binding.cvTicTacToeView.ticTacToeField!!.columns) {
-                    if (Random.nextBoolean()){
-                        binding.cvTicTacToeView.ticTacToeField!!.setCell(i,j, Cell.PLAYER_ONE)
-                    } else {
-                        binding.cvTicTacToeView.ticTacToeField!!.setCell(i,j, Cell.PLAYER_TWO)
-                    }
+        binding.cvTicTacToeView.actionListener = { row, column, field ->
+            val cell = field.getCell(row, column)
+            if (cell == Cell.EMPTY) {
+                if (isFirstPlayer) {
+                    field.setCell(row, column, Cell.PLAYER_ONE)
+                } else {
+                    field.setCell(row, column, Cell.PLAYER_TWO)
                 }
+                isFirstPlayer = !isFirstPlayer
             }
         }
     }
