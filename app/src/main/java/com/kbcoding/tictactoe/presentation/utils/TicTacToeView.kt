@@ -19,11 +19,11 @@ import kotlin.properties.Delegates
 
 typealias OnCellActionListener = (row: Int, column: Int, field: TicTacToeField) -> Unit
 
-class TicTacToeView(
+class TicTacToeView @JvmOverloads constructor(
     context: Context,
-    attributeSet: AttributeSet?,
-    defStyleAttr: Int,
-    defStyleRes: Int
+    attributeSet: AttributeSet? = null,
+    defStyleAttr: Int = R.attr.ticTacToeFieldStyle,
+    defStyleRes: Int = R.style.DefaultTicTacToeStyle
 ) : View(context, attributeSet, defStyleAttr, defStyleRes) {
 
     var ticTacToeField: TicTacToeField? = null
@@ -56,13 +56,13 @@ class TicTacToeView(
     private lateinit var currentCellPaint: Paint
     private lateinit var gridPaint: Paint
 
-    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) :
-            this(context, attributeSet, defStyleAttr, R.style.DefaultTicTacToeStyle)
-
-    constructor(context: Context, attributeSet: AttributeSet?) :
-            this(context, attributeSet, R.attr.ticTacToeFieldStyle)
-
-    constructor(context: Context) : this(context, null)
+//    constructor(context: Context, attributeSet: AttributeSet?, defStyleAttr: Int) :
+//            this(context, attributeSet, defStyleAttr, R.style.DefaultTicTacToeStyle)
+//
+//    constructor(context: Context, attributeSet: AttributeSet?) :
+//            this(context, attributeSet, R.attr.ticTacToeFieldStyle)
+//
+//    constructor(context: Context) : this(context, null)
 
     init {
         if (attributeSet != null) {
